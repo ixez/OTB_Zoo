@@ -1,7 +1,7 @@
 #include "Backgrounds.h"
 #include <string>
 #include <cstdio>
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 
 
 using namespace std;

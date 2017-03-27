@@ -32,7 +32,7 @@
 #include "Sample.h"
 
 #include <vector>
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 
 #include <opencv/cv.h>
 

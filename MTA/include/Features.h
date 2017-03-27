@@ -3,7 +3,7 @@
 	
 #include "Sample.h"
 
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 #include <vector>
 
 class Features

@@ -33,7 +33,7 @@
 #include <opencv/cv.h>
 #include <vector>
 
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 
 class ImageRep
 {
