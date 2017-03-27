@@ -1,7 +1,7 @@
 #ifndef KERNELS_H
 #define KERNELS_H
 
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 #include <cmath>
 
 class Kernel

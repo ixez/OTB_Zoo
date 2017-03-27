@@ -24,7 +24,7 @@
 #include "opencv2/nonfree/features2d.hpp"
 #include "opencv2/legacy/legacy.hpp"
 #include <opencv2\contrib\contrib.hpp>
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 
 using namespace std;
 using namespace cv;

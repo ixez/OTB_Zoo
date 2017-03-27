@@ -1,7 +1,7 @@
 // #ifndef BACKGROUNDS_H
 // #define BACKGROUNDS_H
 // 
-// #include<Eigen3.2/Core>
+// #include<Eigen/Core>
 // 
 // class Backgrounds
 // {
@@ -27,7 +27,7 @@
 #ifndef BACKGROUNDS_H
 #define BACKGROUNDS_H
 
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 #include <vector>
 
 class Backgrounds

@@ -4,7 +4,7 @@
 #include "Rect.h"
 #include <vector>
 #include <opencv/cv.h>
-#include <Eigen3.2/Core>
+#include <Eigen/Core>
 
 #include <opencv2/flann/flann.hpp>
 #include <opencv2/highgui/highgui.hpp>
