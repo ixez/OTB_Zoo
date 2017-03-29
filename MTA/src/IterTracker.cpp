@@ -365,10 +365,10 @@ void ITTrack::TrackMH(const cv::Mat& frame)
 	
 	ImageRep image(frame, m_needsIntegralImage, m_needsIntegralHist,m_bcolorimage);	
 	m_Images.push_back(image);
-		
+
+	#pragma omp for  
 	for (int T_ID=0;T_ID<m_NumTracker;T_ID++)
 	{
-
 		TrackSingleWOUpd(image,m_vecLearner[T_ID],m_vecBB[T_ID]);
 		m_vecTrajectory[T_ID].push_back(m_vecBB[T_ID]);
 	}
@@ -679,6 +679,7 @@ void ITTrack::TrackBack()
 {
 	for (int frmID = m_frameInterval-1;frmID>=0;frmID--)
 	{
+		#pragma omp for  
 		for (int T_ID=0;T_ID<m_NumTracker;T_ID++)
 		{			
 

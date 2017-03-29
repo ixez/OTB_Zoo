@@ -159,71 +159,32 @@ int main(int argc, char* argv[])
 	std::string sZeroNum;
 	std::string file_ext;
 
-	if (argc<2)
-	{
-		string sseqName = "basketball";
-		string sseqPath =  "D:\\code\\tracking\\Benchdata\\basketball\\";
-		string sFeat = "haar";
-		string sKern = "gaussian";
-		int nSeed = 0;
-		int nSearchRadius = 30;
-		double dsvmC  = 100.0;
-		int svmBsize = 100;
-		double dParam = 0.2;
+	string sseqName = argv[1];
+	string sseqPath = argv[2];
+	string sFeat = "haar";
+	string sKern = "gaussian";
+	int nSeed = 0;
+	int nSearchRadius = 30;
+	double dsvmC  = 100.0;
+	int svmBsize = 100;
+	double dParam = 0.2;
 		
-		startFrame = 1;
-		endFrame = 725;
-		xmin = 197.f;
-		ymin = 213.f;
-		width = 34.f;
-		height = 81.f;
+	startFrame = atoi(argv[3]);
+	endFrame = atoi(argv[4]);
+	xmin = atoi(argv[5]);
+	ymin = atoi(argv[6]);
+	width = atoi(argv[7]);
+	height = atoi(argv[8]);
 
-		sZeroNum = "4";
-		file_ext = "jpg";
+	sZeroNum = argv[9];
+	file_ext = argv[10];
 
-		conf.setting(sseqName, sseqPath, 
-			nSeed, nSearchRadius,dsvmC,svmBsize, sFeat, sKern, dParam);
+	conf.quietMode = (strcmp(argv[11],"1")==0)?false:true;
 
-		cout << conf << endl;
+	conf.setting(sseqName, sseqPath, 
+		nSeed, nSearchRadius,dsvmC,svmBsize, sFeat, sKern, dParam);
 
-	}
-	else if (argc ==20)
-	{
-		string sseqName = argv[10];
-		string sseqPath = argv[11];
-		string sFeat = argv[1];
-		string sKern = argv[2];		
-		int nSeed = 0;
-		int nSearchRadius = stoi(argv[6]);
-		double dsvmC  = stod(argv[4]);
-		int svmBsize = stoi(argv[5]);
-		double dParam = stod(argv[3]);
-
-
-
-		cout<<sseqPath.c_str()<<endl;
-		conf.setting(sseqName, sseqPath, 
-			nSeed, nSearchRadius,dsvmC,svmBsize, sFeat, sKern, dParam);
-		cout << conf << endl;
-		startFrame = stoi(argv[12]);
-		endFrame = stoi(argv[13]);
-		xmin = stof(argv[16]);
-		ymin = stof(argv[17]);
-		width = stof(argv[18]);
-		height = stof(argv[19]);
-
-		sZeroNum = argv[14];
-		file_ext = argv[15];
-	}
-	else{
-		cout<<"No Config File"<<endl;
-	}
-
-	if (conf.features.size() == 0)
-	{
-		cout << "error: no features specified in config" << endl;
-		return EXIT_FAILURE;
-	}
+	cout << conf << endl;
 
 	ofstream outFile;
 	if (conf.resultsPath != "")
@@ -236,29 +197,7 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	ofstream outFile2;
-	if (conf.SelectRatioPath != "")
-	{
-		outFile2.open(conf.SelectRatioPath.c_str(), ios::out);
-		if (!outFile2)
-		{
-			cout << "error: could not open results file: " << conf.SelectRatioPath << endl;
-			return EXIT_FAILURE;
-		}
-	}
-	ofstream outFile3;
-	if (conf.timePath != "")
-	{
-		outFile3.open(conf.timePath.c_str(), ios::out);
-		if (!outFile3)
-		{
-			cout << "error: could not open time file: " << conf.timePath << endl;
-			return EXIT_FAILURE;
-		}
-	}
 	VideoCapture cap;
-
-
 	string imgFormat;
 
 	unsigned char* pcInImage = NULL;
@@ -266,7 +205,7 @@ int main(int argc, char* argv[])
 
 	string gtLine;
 	ifstream gtFile;
-	imgFormat = conf.sequenceBasePath+"/img/%0"+sZeroNum+"d."+file_ext;	
+	imgFormat = conf.sequenceBasePath+"/%0"+sZeroNum+"d."+file_ext;	
 
 	char imgPath[256];
 	sprintf(imgPath, imgFormat.c_str(), startFrame);
@@ -307,6 +246,7 @@ int main(int argc, char* argv[])
 	ITTrack ITTracker(conf);
 	
 	Mat frame,frame2;
+
 	for (int frameInd = startFrame; frameInd <= endFrame; ++frameInd)
 	{
 		char imgPath[256];
@@ -325,17 +265,7 @@ int main(int argc, char* argv[])
 		{	
 			ITTracker.InitialiseMH(frame,initBB,endFrame-startFrame+1);
 			
-			doInitialise = true;	
-// 			if (outFile2)
-// 			{
-// 				const FloatRect& bb = ITTracker.GetBB(0);				
-// 				outFile2 << bb.XMin()/**fRatio*/ << " " << bb.YMin()/**fRatio*/ << " " << bb.Width()/**fRatio*/ << " " << bb.Height()/**fRatio*/ << endl;
-// 			}
-// 			if (outFile3)
-// 			{
-// 				const FloatRect& bb = ITTracker.GetBB(1);				
-// 				outFile3 << bb.XMin()/**fRatio*/ << " " << bb.YMin()/**fRatio*/<< " " << bb.Width()/**fRatio*/ << " " << bb.Height()/**fRatio*/ << endl;
-// 			}
+			doInitialise = true;
  		}		
 		
 		if (frameInd>startFrame)
@@ -358,79 +288,23 @@ int main(int argc, char* argv[])
 			{
 				rectangle(result, ITTracker.GetBB(2),CV_RGB(248, 182,44));
 			}
-			
-// 			if (outFile2)
-// 			{
-// 				const FloatRect& bb = ITTracker.GetBB(0);				
-// 				outFile2 << bb.XMin()/**fRatio*/ << " " << bb.YMin()/**fRatio*/ << " " << bb.Width()/**fRatio*/<< " " << bb.Height()/**fRatio*/ << endl;
-//  			}
-// 			if (outFile3)
-// 			{
-// 				const FloatRect& bb = ITTracker.GetBB(1);				
-// 				outFile3 << bb.XMin()/**fRatio*/ << " " << bb.YMin()/**fRatio*/ << " " << bb.Width()/**fRatio*/ << " " << bb.Height()/**fRatio */<< endl;
-// 			}
 		}	
 		
 		if (!conf.quietMode)
 		{
 			imshow("result", result);
-			int key = waitKey(paused ? 0 : 1);
-			if (key != -1)
-			{
-				if (key == 27 || key == 113) // esc q
-				{
-					break;
-				}
-				else if (key == 112) // p
-				{
-					paused = !paused;
-				}
-				else if (key == 105 )
-				{
-					doInitialise = true;
-				}
-			}
-			if (frameInd == endFrame)
-			{
-				for (int nframe = 0;nframe<ITTracker.m_vecFusioinBB.size();nframe++)
-				{
-					outFile << ITTracker.m_vecFusioinBB[nframe].XMin()/fRatio << ","  << ITTracker.m_vecFusioinBB[nframe].YMin()/fRatio << ","  << ITTracker.m_vecFusioinBB[nframe].Width()/fRatio << ","  << ITTracker.m_vecFusioinBB[nframe].Height()/fRatio << endl;
-				}
-
-				for (int n_T = 0;n_T<ITTracker.T_counter.size();n_T++)
-				{
-					outFile2 << ITTracker.T_counter[n_T];
-					if (n_T<ITTracker.T_counter.size()-1)
-					{
-						outFile2 <<",";
-					}
-				}
-				outFile2 <<"\n";
-				for (int n_T = 0;n_T<ITTracker.T_Select.size();n_T++)
-				{
-					outFile2 << ITTracker.T_Select[n_T];
-					if (n_T<ITTracker.T_Select.size()-1)
-					{
-						outFile2 <<",";
-					}
-				}
-				outFile3<<(double)frame_counter/TIME_SUM<<endl;
-			}
+			waitKey(1);
 		}
+	}
+
+	for (int nframe = 0; nframe<ITTracker.m_vecFusioinBB.size(); nframe++)
+	{
+		outFile << ITTracker.m_vecFusioinBB[nframe].XMin() / fRatio << "," << ITTracker.m_vecFusioinBB[nframe].YMin() / fRatio << "," << ITTracker.m_vecFusioinBB[nframe].Width() / fRatio << "," << ITTracker.m_vecFusioinBB[nframe].Height() / fRatio << endl;
 	}
 
 	if (outFile.is_open())
 	{
 		outFile.close();
 	}
-	if (outFile2.is_open())
-	{
-		outFile2.close();
-	}
-	if (outFile3.is_open())
-	{
-		outFile3.close();
-	}
 	return EXIT_SUCCESS;
-	return 0;
 }

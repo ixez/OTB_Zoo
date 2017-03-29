@@ -190,7 +190,6 @@ void Config::setting(const std::string& path)
 void Config::setting(std::string& seqname,std::string& seqpath,
 	int nSeed, int sRadius, double dsvmC, int svmBSize,std::string featName,std::string kernName, double dParam)
 {
-	quietMode = false;
 	debugMode	= false;
 	sequenceName = seqname;
 	sequenceBasePath = seqpath;
