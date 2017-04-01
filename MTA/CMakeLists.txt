@@ -1,6 +1,11 @@
 project(MTA)
 cmake_minimum_required(VERSION 3.4.1)
 
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "No build type selected, defaulting to Release")
+    set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 find_package(OpenCV REQUIRED)
 if(NOT DEFINED EIGEN3_INCLUDE_DIR)
     find_package(Eigen3)
