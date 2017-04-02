@@ -1,5 +1,5 @@
-project(MTA)
 cmake_minimum_required(VERSION 3.4.1)
+project(MTA)
 
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, defaulting to Release")
@@ -7,13 +7,10 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 find_package(OpenCV REQUIRED)
-if(NOT DEFINED EIGEN3_INCLUDE_DIR)
-    find_package(Eigen3)
-    if(NOT Eigen3_FOUND)
-        message(FATAL_ERROR "Eigen3 is not found.")
-    endif()
+if(NOT DEFINED EIGEN3_INCLUDE_DIRS)
+    find_package(Eigen3 REQUIRED)
 endif()
-include_directories(${EIGEN3_INCLUDE_DIR})
+include_directories(${EIGEN3_INCLUDE_DIRS})
 
 set(MTA_include_path "${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories(${MTA_include_path})
