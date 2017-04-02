@@ -12,15 +12,15 @@ if(NOT DEFINED EIGEN3_INCLUDE_DIRS)
 endif()
 
 include_directories(
-    src
-    ${EIGEN3_INCLUDE_DIRS}]
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    ${EIGEN3_INCLUDE_DIRS}
 )
 
-file(GLOB_RECURSE SRC RELATIVE ${PROJECT_SOURCE_DIR} src/*.cpp)
-file(GLOB_RECURSE HEADERS RELATIVE ${PROJECT_SOURCE_DIR} src/*.h)
+file(GLOB_RECURSE SRC RELATIVE ${PROJECT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE HEADERS RELATIVE ${PROJECT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 
-add_executable(struck ${HEADERS} ${SRC})
+add_executable(Struck ${HEADERS} ${SRC})
 
-target_link_libraries(struck
+target_link_libraries(Struck
     ${OpenCV_LIBS}
 )
