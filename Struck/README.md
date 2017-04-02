@@ -26,7 +26,7 @@ make
 ```
 
 ## Usage
-Copy Matlab script `run_Struck.m`, configuration file `config.txt` and compiled MTA excutable file into OTB's tracker directory.
+Copy Matlab script `run_Struck.m`, configuration file `config.txt` and compiled Struck excutable file into OTB's tracker directory.
 
 ## Dependencies
 1. OpenCV 2.4.11
