@@ -13,15 +13,15 @@ Every tracker included has a Matlab `run_XXX.m` script of OTB's framework. Track
 
 ## Trackers
 `source` links are attached which are the original version of code. Code in our project may be modified and reorganized.  
-- **KCF:** João F. Henriques, Rui Caseiro, Pedro Martins, Jorge Batista. 
-"High-Speed Tracking with Kernelized Correlation Filters." TPAMI (2015).
-[[paper](http://www.robots.ox.ac.uk/~joao/publications/henriques_tpami2015.pdf)]
-[[project](http://www.robots.ox.ac.uk/~joao/circulant/)]
-[[source](https://github.com/joaofaro/KCFcpp)]
-- **MTA:** Dae Youn Lee, Jae Young Sim, Chang-Su Kim. “Multihypothesis Trajectory Analysis for Robust Visual Tracking.”CVPR (2015).
+- **MTA:** Dae Youn Lee, Jae Young Sim, Chang-Su Kim. “Multihypothesis Trajectory Analysis for Robust Visual Tracking.” CVPR (2015).
 [[paper](http://mcl.korea.ac.kr/research/object_tracking/dylee_cvpr2015/dylee_cvpr_2015_paper.pdf)]
 [[project](http://mcl.korea.ac.kr/research/object_tracking/dylee_cvpr2015/)]
 [[source](http://mcl.korea.ac.kr/research/object_tracking/dylee_cvpr2015/dylee_cvpr_2015_source_code.zip)]
+- **Struck:** S. Hare, A. Saffari, P. H. Torr. “Struck: Structured output tracking with kernels.” ICCV (2011).
+[[paper](http://www.samhare.net/research/files/iccv2011_struck.pdf)]
+[[project](http://www.samhare.net/research/struck)]
+[[source](https://github.com/samhare/struck)]
+
 
 ## Others
 If you need trackers' result and information, please refer to [foolwood/benchmark_results](https://github.com/foolwood/benchmark_results).
