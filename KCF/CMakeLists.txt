@@ -21,6 +21,10 @@ set(KCF_src_path
 add_executable( KCF ${KCF_src_path})
 target_link_libraries( KCF ${OpenCV_LIBS})
 
-
+set_target_properties(KCF PROPERTIES
+		CXX_STANDARD 11
+		CXX_STANDARD_REQUIRED ON
+		CXX_EXTENSIONS OFF
+)
 
 
