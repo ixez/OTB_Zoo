@@ -7,14 +7,19 @@ y=seq.init_rect(2)-1;
 w=seq.init_rect(3);
 h=seq.init_rect(4);
 
+if ispc
+    exec = 'Struck.exe';
+else
+    exec = './Struck';
+end
 tic
-command = ['MTA.exe' ' ' seq.name ' ' seq.path ' ' num2str(seq.startFrame) ' ' num2str(seq.endFrame) ' ' num2str(x) ' ' num2str(y) ' ' num2str(w) ' ' num2str(h) ' '  num2str(seq.nz) ' ' seq.ext ' ' '0'];
+command = [exec ' ' seq.name ' ' seq.path ' ' num2str(seq.startFrame) ' ' num2str(seq.endFrame) ' ' num2str(x) ' ' num2str(y) ' ' num2str(w) ' ' num2str(h) ' '  num2str(seq.nz) ' ' seq.ext ' ' '0'];
 dos(command);
 duration=toc;
 
-results.res = dlmread([seq.name '_MRT.txt']);
+results.res = dlmread([seq.name '_Struck.txt']);
 results.res(:,1:2) =results.res(:,1:2) + 1;%c to matlab
-delete([seq.name '_MRT.txt'])
+delete([seq.name '_Struck.txt'])
 
 results.type='rect';
 results.fps=seq.len/duration;

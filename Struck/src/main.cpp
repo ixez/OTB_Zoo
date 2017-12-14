@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 	float scaleH = 1.f;
 
     conf.sequenceBasePath=argv[2];
-    imgFormat = conf.sequenceBasePath+"/%0"+argv[9]+"d."+argv[10];
+    imgFormat = conf.sequenceBasePath+"%0"+argv[9]+"d."+argv[10];
 
     // read first frame to get size
     char imgPath[256];
