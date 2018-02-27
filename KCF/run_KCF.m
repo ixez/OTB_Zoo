@@ -13,14 +13,12 @@ else
     show='0';
 end
 
-%featureName kernelName param svmC svmBudgetSize searchRadius seed
-%featureName: raw haar histogram
-%kernelName: linear gaussian intersection chi2
-%seed: default - 0
 if ispc
     exec = 'KCF.exe';
 else
     exec = './KCF';
+    setenv('LD_LIBRARY_PATH','/usr/lib/:/usr/local/lib/:/usr/lib/x86_64-linux-gnu/');
+    dos('chmod +x ./KCF');
 end
 tic
 command = [exec ' ' seq.name ' ' seq.path ' ' num2str(seq.startFrame) ' ' num2str(seq.endFrame) ' '  num2str(seq.nz) ' ' seq.ext ' ' num2str(x) ' ' num2str(y) ' ' num2str(w) ' ' num2str(h) ' ' show];
@@ -38,4 +36,3 @@ end
 results.type='rect';
 results.fps=seq.len/duration;
 
-% results.fps = dlmread([seq.name '_ST_FPS.txt']);
