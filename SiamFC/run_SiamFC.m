@@ -5,9 +5,9 @@ close all;
 % Please modify this block before running
 p.net_path = '/path/to/models/2016-08-17.net.mat';
 addpath(genpath('/path/to/matconvnet/matlab'));
-addpath(genpath('/path/to/siamese-fc/util'));
 vl_setupnn;
 
+addpath(genpath('./util'));
 stats = [];
 results.res = [];
 
