@@ -1,0 +1,9 @@
+# SiamFC
+Original code is from [here](https://www.robots.ox.ac.uk/~luca/siamese-fc.html).
+
+## How to
+- Compile [Matconvnet](http://www.vlfeat.org/matconvnet/). `v1.0-beta20` is used in the original version.
+- Modify the very first lines of `run_SiamFC.m` by correct paths of Matconvnet and the SiamFC model.
+
+## Cite
+Jack Valmadre, Luca Bertinetto, João F. Henriques, Andrea Vedaldi, Philip H. S. Torr. "End-to-end representation learning for Correlation Filter based tracking." CVPR (2017).
