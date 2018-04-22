@@ -1,6 +1,12 @@
 function [ result ] = CREST_tracking( opts, varargin, config, display)
 %Test function
 global objSize;
+global enable_conv1;
+global enable_conv2;
+global enable_conv3;
+enable_conv1 = true;
+enable_conv2 = true;
+enable_conv3 = false;
 
 LocGt=config.gt;
 num_channels=64;
@@ -155,8 +161,16 @@ for i=2:nFrame
     feat_=feat_*coeff;
     featPCA=reshape(feat_,hf,wf,num_channels);    
     
-    net_online.eval({'input1',gpuArray(featPCA),'input2',gpuArray(featPCA1st)});    
-    regression_map=gather(net_online.vars(10).value);        
+    inputLayer={};
+    if enable_conv1 || enable_conv2
+        inputLayer=[inputLayer,'input1',{gpuArray(featPCA)}];
+    end
+    if enable_conv3
+        inputLayer=[inputLayer,'input2',{gpuArray(featPCA1st)}];
+    end
+%     net_online.eval({'input1',gpuArray(featPCA),'input2',gpuArray(featPCA1st)});    
+    net_online.eval(inputLayer);    
+    regression_map=gather(net_online.vars(net_online.getVarIndex('sum_1')).value);        
              
     motion_sigma = target_sz1*motion_sigma_factor;    
     motion_map=gaussian_shaped_labels(motion_sigma, l1_patch_num);

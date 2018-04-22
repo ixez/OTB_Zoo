@@ -204,6 +204,10 @@ adjustTime = 0 ;
 stats.num = 0 ; % return something even if subset = []
 stats.time = 0 ;
 
+global enable_conv1;
+global enable_conv2;
+global enable_conv3;
+
 start = tic ;
 for t=1:params.batchSize:numel(subset)
   fprintf('%s: epoch %02d: %3d/%3d:', mode, epoch, ...
@@ -240,8 +244,17 @@ for t=1:params.batchSize:numel(subset)
     ims1=gpuArray(ims1);
     ims2=gpuArray(ims2);
     labels=gpuArray(labels);
-        
-    inputs ={'input1', ims1, 'input2', ims2,'label', labels};
+    
+    inputs={};
+    if enable_conv1 || enable_conv2
+        inputs=[inputs, 'input1', {ims1}];
+    end
+    
+    if enable_conv3
+        inputs=[inputs, 'input2', {ims2}];
+    end
+    
+    inputs=[inputs, 'label', {labels}];
 
     if params.prefetch
       if s == params.numSubBatches

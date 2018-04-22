@@ -14,6 +14,9 @@ cos_window = hann(l1_patch_num(1)) * hann(l1_patch_num(2))';
 sz_window=size(cos_window);
 
 %%  ---------scale refinement------------
+global enable_conv1;
+global enable_conv2;
+global enable_conv3;
 scale=[1 0.95 1.05];
 value=zeros(3,1);
 for i=1:length(scale)
@@ -31,8 +34,18 @@ for i=1:length(scale)
     feat_=reshape(feat,hf*wf,cf);
     feat_=feat_*coeff;
     featPCA=reshape(feat_,hf,wf,num_channels);
-    net_online.eval({'input1',gpuArray(featPCA),'input2',gpuArray(featPCA1st)});
-    regression_map=gather(net_online.vars(10).value);
+    
+    inputs={};
+    if enable_conv1 || enable_conv2
+        inputs=[inputs, 'input1', {gpuArray(featPCA)}];
+    end
+    
+    if enable_conv3
+        inputs=[inputs, 'input2', {gpuArray(featPCA1st)}];
+    end
+    
+    net_online.eval(inputs);
+    regression_map=gather(net_online.vars(net_online.getVarIndex('sum_1')).value);
     value(i)=max(regression_map(:));
     
     if value(1)<threshold        

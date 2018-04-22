@@ -8,6 +8,7 @@ function [net,stats] = cnn_train_dag(net, imdb, input, getBatch, varargin)
 %
 % This file is part of the VLFeat library and is made available under
 % the terms of the BSD license (see the COPYING file).
+
 addpath(fullfile(vl_rootnn, 'examples'));
 
 opts.expDir = fullfile('data','exp') ;
@@ -201,6 +202,9 @@ adjustTime = 0 ;
 stats.num = 0 ; % return something even if subset = []
 stats.time = 0 ;
 
+global enable_conv1;
+global enable_conv2;
+global enable_conv3;
 start = tic ;
 for t=1:params.batchSize:numel(subset)
   fprintf('%s: epoch %02d: %3d/%3d:', mode, epoch, ...
@@ -218,8 +222,17 @@ for t=1:params.batchSize:numel(subset)
     ims=input{1};
     labels=input{2};
     
-    inputs ={'input1', gpuArray(ims),'input2', ...
-        gpuArray(ims), 'label', gpuArray(labels)};
+    inputs={};
+    if enable_conv1 || enable_conv2
+        inputs=[inputs, 'input1', {gpuArray(ims)}];
+    end
+    
+    if enable_conv3
+        inputs=[inputs, 'input2', {gpuArray(ims)}];
+    end
+    
+    inputs=[inputs, 'label', {gpuArray(labels)}];
+    
 
     if params.prefetch
       if s == params.numSubBatches
