@@ -1,0 +1,9 @@
+net: "./training_ResNet_second.prototxt"
+base_lr: 0.00000005
+lr_policy: "fixed"
+display: 1
+max_iter: 50
+momentum: 0.9
+weight_decay: 0.01
+
+

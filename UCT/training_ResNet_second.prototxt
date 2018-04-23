@@ -1,0 +1,176 @@
+name: "ResNet"
+
+input: "data_14"
+input_dim: 1
+input_dim: 1024
+input_dim: 14
+input_dim: 14
+
+input: "data_28"
+input_dim: 1
+input_dim: 512
+input_dim: 28
+input_dim: 28
+
+input: "labels_14"
+input_dim: 1 		
+input_dim: 1             
+input_dim: 14  		
+input_dim: 14 
+
+
+input: "labels_28"
+input_dim: 1 		
+input_dim: 1             
+input_dim: 28  		
+input_dim: 28
+ 		
+
+
+#-----------------------layer +-------------------------
+
+layer {
+   name: "conv6_14_1"
+   type: "Convolution"
+   bottom: "data_14"
+   top: "conv6_14_1"
+	param {
+		lr_mult: 1
+	}
+	param {
+		lr_mult: 2
+	}
+   convolution_param{
+	   num_output: 64
+	   kernel_size: 7
+	   pad: 3
+	   stride: 1
+	   weight_filler {
+		 type: "gaussian"
+		 std: 0.000002
+                 #type: "constant"
+		# value: 0
+	   }
+	   bias_filler {
+		 type: "constant"
+		 value: 0
+	   }
+   }
+}
+
+
+layer {
+	bottom: "conv6_14_1"
+	top: "conv6_14_1"
+	name: "relu6_14_1"
+	type: "ReLU"
+}
+
+
+layer {
+   name: "conv6_14_2"
+   type: "Convolution"
+   bottom: "conv6_14_1"
+   top: "conv6_14_2"
+	param {
+		lr_mult: 1
+	}
+	param {
+		lr_mult: 2
+	} 
+   convolution_param{
+	   num_output: 1
+	   kernel_size: 7
+	   pad: 3
+	   stride: 1
+	   weight_filler {
+		 type: "gaussian"
+		 std: 0.01
+
+	   }
+	   bias_filler {
+		 type: "constant"
+		 value: 0
+	   }
+   }
+}
+
+
+
+layer {
+   name: "conv6_28"
+   type: "Convolution"
+   bottom: "data_28"
+   top: "conv6_28"
+	param {
+		lr_mult: 1
+	}
+	param {
+		lr_mult: 2
+	}
+   convolution_param{
+	   num_output: 1
+	   kernel_size: 3
+	   pad: 1
+	   stride: 1
+	   weight_filler {
+		 type: "gaussian"
+		 std: 0.0000000001
+                 #type: "constant"
+		# value: 0
+	   }
+	   bias_filler {
+		 type: "constant"
+		 value: 0
+	   }
+   }
+}
+
+
+
+
+
+
+
+ layer {  
+  name: "loss_14"  
+  type: "EuclideanLoss"  
+  bottom: "conv6_14_2"  
+  bottom: "labels_14"  
+  top: "loss_14"  
+} 
+
+
+
+ layer {  
+  name: "loss_28"  
+  type: "EuclideanLoss"  
+  bottom: "conv6_28"  
+  bottom: "labels_28"  
+  top: "loss_28"  
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

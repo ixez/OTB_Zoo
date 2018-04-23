@@ -1,0 +1,41 @@
+0, download the trained Network at
+ 
+https://www.dropbox.com/s/la5cx9er8h2tjd2/ResNet_use.caffemodel?dl=0
+
+this file is too large and we can not upload it to VOT server.
+
+1,follow the instroctions in https://github.com/BVLC/caffe  to install caffe and its dependencies, compile matcaffe
+
+2, add caffe path to tracker_UCT.m, makes it like:
+
+tracker_label = ['UCT'];
+
+tracker_command = generate_matlab_command('UCT', {'/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab', ...
+    '/home/zhengzhu/data/SCF/UCT_vot2017/caffe/matlab'})
+
+3 modefy the related paths in solver_first_frame_second.prototxt  and solver_next_frame_second.prototxt, makes it look like:
+net: "/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/training_ResNet_second.prototxt"
+net: "/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/training_ResNet_second.prototxt"
+
+
+4, runfile is UCT.m, modefy the related path in UCT.m according to your computers, makes it like:
+
+    state.net_first_def='/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/training_ResNet_first_152.prototxt';
+    state.solver_def_file_first_frame_second='/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/solver_first_frame_second.prototxt';
+    state.solver_def_file_next_frame_second = '/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/solver_next_frame_second.prototxt';
+    state.net_file_first_frame_first='/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/ResNet_use.caffemodel';
+    state.initial_net = '/home/zhengzhu/data/SCF/UCT_vot2017/tracker/examples/matlab/initial';
+
+5, to run CPU version, modify "caffe.set_mode_gpu(); caffe.set_device(0);" in UCT.m to "caffe.set_mode_cpu();"
+
+6, our computer:
+operating system: ubuntu 14.04
+caffe:  https://github.com/BVLC/caffe
+Matlab: R2014A
+python:2,7
+GPU: NVIDIA GTX1080
+
+6, contact: zhuzheng2014@ia.ac.cn
+
+
+
