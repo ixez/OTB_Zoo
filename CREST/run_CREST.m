@@ -1,5 +1,5 @@
 
-function results=run_CREST(seq, res_path, bSaveImage)
+function results=run_CREST(seq, res_path, bSaveImage, args)
 display = false;
 nFrame = length(seq.s_frames);
 initstate = seq.init_rect;
@@ -18,6 +18,21 @@ opts.train = struct([]) ;
 
 %Test function
 global objSize;
+
+
+global enable_conv1;
+global enable_conv2;
+global enable_conv3;
+if isempty(args)
+    enable_conv1 = true;
+    enable_conv2 = true;
+    enable_conv3 = true;
+else
+    enable_conv1 = args.conv1;
+    enable_conv2 = args.conv2;
+    enable_conv3 = args.conv3;
+end
+
 objSize=initstate(3:4);
 num_channels=64;
 
@@ -166,8 +181,16 @@ for i=2:nFrame
     feat_=feat_*coeff;
     featPCA=reshape(feat_,hf,wf,num_channels);    
     
-    net_online.eval({'input1',gpuArray(featPCA),'input2',gpuArray(featPCA1st)});    
-    regression_map=gather(net_online.vars(10).value);        
+    inputLayer={};
+    if enable_conv1 || enable_conv2
+        inputLayer=[inputLayer,'input1',{gpuArray(featPCA)}];
+    end
+    if enable_conv3
+        inputLayer=[inputLayer,'input2',{gpuArray(featPCA1st)}];
+    end
+%     net_online.eval({'input1',gpuArray(featPCA),'input2',gpuArray(featPCA1st)});    
+    net_online.eval(inputLayer);    
+    regression_map=gather(net_online.vars(net_online.getVarIndex('sum_1')).value);      
              
     motion_sigma = target_sz1*motion_sigma_factor;    
     motion_map=gaussian_shaped_labels(motion_sigma, l1_patch_num);
