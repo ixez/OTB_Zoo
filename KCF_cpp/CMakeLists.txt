@@ -12,17 +12,17 @@ set(KCF_include_path "${CMAKE_CURRENT_SOURCE_DIR}/include")
 include_directories(${KCF_include_path})
 
 set(KCF_src_path "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(KCF_src_path
+set(KCF_src
         "${KCF_src_path}/fhog.cpp"
         "${KCF_src_path}/kcftracker.cpp"
         "${KCF_src_path}/main.cpp"
         "${KCF_src_path}/TrackTask.cpp"
         )
-add_executable( KCF ${KCF_src_path})
+add_executable( KCF ${KCF_src})
 target_link_libraries( KCF ${OpenCV_LIBS})
 
 set_target_properties(KCF PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
-        )
+)
