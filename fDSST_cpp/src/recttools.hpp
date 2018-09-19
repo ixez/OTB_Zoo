@@ -115,14 +115,23 @@ inline cv::Rect getBorder(const cv::Rect_<t > &original, cv::Rect_<t > & limited
 inline cv::Mat subwindow(const cv::Mat &in, const cv::Rect & window, int borderType = cv::BORDER_CONSTANT)
 {
     cv::Rect cutWindow = window;
+    cv::Mat res;
     RectTools::limit(cutWindow, in.cols, in.rows);
-    if (cutWindow.height <= 0 || cutWindow.width <= 0)assert(0); //return cv::Mat(window.height,window.width,in.type(),0) ;
-    cv::Rect border = RectTools::getBorder(window, cutWindow);
-    cv::Mat res = in(cutWindow);
+    if (cutWindow.height <= 0 || cutWindow.width <= 0) {
+        cv::copyMakeBorder(in, res, abs(window.y), abs(window.y), abs(window.x), abs(window.x), borderType);
+        cutWindow = window;
+        cutWindow.x += abs(window.x);
+        cutWindow.y += abs(window.y);
+        res = res(cutWindow);
+    }
+    else {
+        cv::Rect border = RectTools::getBorder(window, cutWindow);
+        res = in(cutWindow);
 
-    if (border != cv::Rect(0, 0, 0, 0))
-    {
-        cv::copyMakeBorder(res, res, border.y, border.height, border.x, border.width, borderType);
+        if (border != cv::Rect(0, 0, 0, 0))
+        {
+            cv::copyMakeBorder(res, res, border.y, border.height, border.x, border.width, borderType);
+        }
     }
     return res;
 }
