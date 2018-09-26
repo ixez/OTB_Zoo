@@ -53,3 +53,9 @@ set(MTA_src
 
 add_executable(MTA ${MTA_include} ${MTA_src})
 target_link_libraries(MTA ${OpenCV_LIBS})
+
+set_target_properties(MTA PROPERTIES
+        CXX_STANDARD 11
+        CXX_STANDARD_REQUIRED ON
+        CXX_EXTENSIONS OFF
+)
