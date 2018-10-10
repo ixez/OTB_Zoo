@@ -8,10 +8,12 @@ w=seq.init_rect(3);
 h=seq.init_rect(4);
 
 if ispc
-    exec = 'Struck.exe';
-else
-    exec = './Struck';
-end
+        exec = 'Struck.exe';
+    else
+        exec = './Struck';
+        setenv('LD_LIBRARY_PATH','/usr/lib/:/usr/local/lib/:/usr/lib/x86_64-linux-gnu/');
+        dos('chmod +x ./Struck');
+    end
 tic
 command = [exec ' ' seq.name ' ' seq.path ' ' num2str(seq.startFrame) ' ' num2str(seq.endFrame) ' ' num2str(x) ' ' num2str(y) ' ' num2str(w) ' ' num2str(h) ' '  num2str(seq.nz) ' ' seq.ext ' ' '0'];
 dos(command);

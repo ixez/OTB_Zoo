@@ -20,8 +20,8 @@ class MultiSample;
 class ITTrack {
 
 public:
-	ITTrack::ITTrack(const Config& conf);
-	ITTrack::~ITTrack();
+	ITTrack(const Config& conf);
+	~ITTrack();
 	
 	inline const FloatRect& GetBB() const { return m_bb; }
 	inline bool IsInitialised() const { return m_initialised; }
@@ -69,8 +69,8 @@ private:
 	int m_MaxNumTracker;
 	int m_NumTracker;
 	int m_selectedID;
-	std::vector<std::vector<FloatRect>> m_vecBackTrajectory;
-	std::vector<std::vector<FloatRect>> m_vecTrajectory;
+	std::vector< std::vector<FloatRect> > m_vecBackTrajectory;
+	std::vector< std::vector<FloatRect> > m_vecTrajectory;
 	
 	std::vector<FloatRect> m_vecBB;
 	std::vector<FloatRect> m_vecBackBB;
@@ -79,7 +79,7 @@ private:
 	std::vector<LaRank*> m_vecBackLearner;
 	
 	std::vector<int> m_vecOccFlag;
-	std::vector<std::vector<float>> m_vecBackCost;
+	std::vector< std::vector<float> > m_vecBackCost;
 	std::vector<float> m_InterTrackOvrlap;
 	std::vector<cv::Mat> m_vecFrgImg;
 
@@ -100,12 +100,10 @@ private:
 	int m_txtLocY;
 	double m_fontScale;
 	int m_refineNUM;
-	bool dirExists(const std::string& dirName);
-	void DebugRefine();
-	void DebugInit(const Config& conf);
 	void rectangle(cv::Mat& rMat, const FloatRect& rRect, const cv::Scalar& rColour, int thickness, int linetype);
 	void rectangle(cv::Mat& rMat, const FloatRect& rRect, const cv::Scalar& rColour);
-	void cvDrawDottedRect2(cv::Mat& img,FloatRect rRect, CvScalar& rColour, int thickness, int lenghOfDots, int lineType); 
+	void cvDrawDottedRect2(cv::Mat &img, FloatRect rRect, CvScalar rColour, int thickness, int lenghOfDots,
+						   int lineType);
 	void cvDrawDottedRect(cv::Mat& img,cv::Point pt1, cv::Point pt2,CvScalar color, int thickness, int lenghOfDots, int lineType);
 	void DrawDottedLine(IplImage* img, CvPoint pt1, CvPoint pt2,CvScalar color, int thickness, int lenghOfDots, int lineType, int leftToRight);
 
@@ -116,7 +114,7 @@ private:
 	CvScalar SelectTrackColor(int TID);
 	//////////////////////////////////////////////////////////////////////////
 	//Appearance
-	std::vector<std::vector<float>> m_vecBBDiffval;
+	std::vector< std::vector<float> > m_vecBBDiffval;
 	float CalImgDiff(int TrackID, int nFirstID, int nFrameID,FloatRect& inRect);
 	//////////////////////////////////////////////////////////////////////////
 	// NEW Backtracker
@@ -148,20 +146,13 @@ private:
 	//////////////////////////////////////////////////////////////////////////
 
 	//////////////////////////////////////////////////////////////////////////
-	//Time
-	__int64  m_i64Frequency;
-	__int64  m_i64StartTime;
-	__int64  m_i64FinishTime;
-	//////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////
 	//V3
 	Eigen::VectorXd m_ImgDiffMask;
 	void CalcMask();
 	
-	std::vector<std::vector<float>> m_vecOvl;
-	void ITTrack::TimeDomainPattern(std::vector<float>& TrajectoryDist);
-	//////////////////////////////////////////////////////////////////////////
-	void ITTrack::SaveFBTrajectory();
+	std::vector< std::vector<float> > m_vecOvl;
+	void TimeDomainPattern(std::vector<float>& TrajectoryDist);
 	
 };
 

@@ -2,10 +2,10 @@
 
 #include "Rect.h"
 #include "Config.h"
+
 #include <iostream>
 #include <fstream>
-#include <Windows.h>
-
+#include <stdint.h>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
@@ -142,9 +142,6 @@ int main(int argc, char* argv[])
 {
 	int frame_counter=0;
 	double TIME_SUM=0;
-	LARGE_INTEGER NStartTime, NEndtime, NFrequency;
-
-	QueryPerformanceFrequency(&NFrequency); 
 
 	string configPath = "config_girl_mov.txt";
 	Config conf;
@@ -274,7 +271,6 @@ int main(int argc, char* argv[])
 						
 			ITTracker.TrackMH(frame);
 			frame_counter++;
-			TIME_SUM +=((double)(NEndtime.QuadPart-NStartTime.QuadPart)/NFrequency.QuadPart);
 									
 			//Draw Result box(red)
  			rectangle(result, ITTracker.GetBB(0), CV_RGB(0, 160, 233));

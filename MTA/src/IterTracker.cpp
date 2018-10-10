@@ -16,14 +16,8 @@
 #include <iostream>
 #include <fstream>
 
-#include <direct.h>
-#include <Windows.h>
 #include <opencv/cv.h>
-#include <opencv2/video/tracking.hpp>
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/nonfree/features2d.hpp"
-#include "opencv2/legacy/legacy.hpp"
-#include <opencv2\contrib\contrib.hpp>
+#include <opencv2/opencv.hpp>
 #include <Eigen/Core>
 
 using namespace std;
@@ -41,8 +35,6 @@ ITTrack::ITTrack(const Config& conf)
 	m_frameID = 0;
 	m_frameInterval = 30;
 	m_IsOcclusion = 0;
-
-	DebugInit(conf);
 
 	m_pImages = NULL;
 	T_counter.resize(m_NumTracker);
@@ -143,7 +135,8 @@ void ITTrack::cvDrawDottedRect(Mat& img,Point pt1, Point pt2,CvScalar color, int
 	DrawDottedLine(&ipl_img,tempPt2,pt1,color,thickness,lenghOfDots,lineType, 1); 
 } 
 
-void ITTrack::cvDrawDottedRect2(Mat& img,FloatRect rRect, CvScalar& rColour, int thickness, int lenghOfDots, int lineType) 
+void ITTrack::cvDrawDottedRect2(Mat &img, FloatRect rRect, CvScalar rColour, int thickness, int lenghOfDots,
+								int lineType)
 {	//1---2 
 	//|	  | 
 	//4---3 
@@ -506,145 +499,7 @@ void ITTrack::SelectedTrackerColor(CvScalar& color)
 		color = CV_RGB(146, 208, 80);
 	}
 }
-void ITTrack::DebugRefine()
-{		
-	m_refineNUM++;
-	stringstream ssRfNum;
-	ssRfNum << setw(4) << setfill('0') <<m_refineNUM;	
-	string strRf_num = ssRfNum.str();
-	
-	CvScalar selColor;	
-	SelectedTrackerColor(selColor);
 
-	int nFirstID = m_frameID - m_frameInterval;
-	for (int frmID = 0;frmID<=m_frameInterval;frmID++)
-	{		
-		Mat oriImg;
-		cv::merge(m_Images[frmID].GetImages(),oriImg);
-		cvtColor(oriImg,oriImg,CV_Lab2RGB);
-		
-		Mat mergedImg = Mat(Size(oriImg.cols/*+m_debugWindowWidth*/,oriImg.rows),CV_8UC3);
-		mergedImg.setTo(cv::Scalar(0,0,0));
-		Mat roi = Mat(mergedImg, cv::Rect(0, 0, oriImg.cols, oriImg.rows));
-
-		int nFrameID = nFirstID+frmID;
-		oriImg.copyTo(roi);
-	
-		char framenumber[100] = "#%04d";
-		sprintf(framenumber,framenumber,nFrameID);
-		string text = (string)framenumber;		
-		TextwC(mergedImg,text,10,m_txtLocY+40,1.2,5,CV_RGB(0, 0, 0));
-		TextwC(mergedImg,text,10,m_txtLocY+40,1.2,3,CV_RGB(255, 241, 0));
-		
-		for (int T_ID = 0;T_ID<m_NumTracker;T_ID++)
-		{
-			if (T_ID == 0)
-			{
-				rectangle(mergedImg, m_vecTrajectory[T_ID][nFrameID], CV_RGB(0, 0, 0),4,8);
-				rectangle(mergedImg, m_vecTrajectory[T_ID][nFrameID], CV_RGB(0, 160, 233),2,8);
-				cvDrawDottedRect2(mergedImg, m_vecBackTrajectory[T_ID][frmID], CV_RGB(0,0,0),4,4,8);
-				cvDrawDottedRect2(mergedImg, m_vecBackTrajectory[T_ID][frmID], CV_RGB(0, 160, 233),2,4,8);
-				drawArrow(mergedImg,cv::Point(m_vecTrajectory[T_ID][nFrameID].XCentre(),m_vecTrajectory[T_ID][nFrameID].YCentre()),cv::Point(m_vecBackTrajectory[T_ID][frmID].XCentre(),m_vecBackTrajectory[T_ID][frmID].YCentre()),CV_RGB(0, 160, 233),3,1,CV_AA);
-
-			}
-			if (T_ID == 1)
-			{
-				rectangle(mergedImg, m_vecTrajectory[T_ID][nFrameID], CV_RGB(0, 0, 0),4,8);
-				rectangle(mergedImg, m_vecTrajectory[T_ID][nFrameID], CV_RGB(142, 195, 31),2,8);
-				cvDrawDottedRect2(mergedImg, m_vecBackTrajectory[T_ID][frmID], CV_RGB(0,0,0),4,4,8);
-				cvDrawDottedRect2(mergedImg, m_vecBackTrajectory[T_ID][frmID], CV_RGB(142, 195, 31),2,4,8);
-				drawArrow(mergedImg,cv::Point(m_vecTrajectory[T_ID][nFrameID].XCentre(),m_vecTrajectory[T_ID][nFrameID].YCentre()),cv::Point(m_vecBackTrajectory[T_ID][frmID].XCentre(),m_vecBackTrajectory[T_ID][frmID].YCentre()),CV_RGB(142, 195, 31),3,1,CV_AA);
-			}
-			if (T_ID == 2)
-			{
-				rectangle(mergedImg, m_vecTrajectory[T_ID][nFrameID], CV_RGB(0, 0, 0),4,8);
-				rectangle(mergedImg, m_vecTrajectory[T_ID][nFrameID], CV_RGB(248, 182,44),2,8);
-				cvDrawDottedRect2(mergedImg, m_vecBackTrajectory[T_ID][frmID], CV_RGB(0,0,0),4,4,8);
-				cvDrawDottedRect2(mergedImg, m_vecBackTrajectory[T_ID][frmID], CV_RGB(248, 182,44),2,4,8);
-				drawArrow(mergedImg,cv::Point(m_vecTrajectory[T_ID][nFrameID].XCentre(),m_vecTrajectory[T_ID][nFrameID].YCentre()),cv::Point(m_vecBackTrajectory[T_ID][frmID].XCentre(),m_vecBackTrajectory[T_ID][frmID].YCentre()),CV_RGB(248, 182,44),3,1,CV_AA);
-			}
-		}
-		
-				
-		stringstream ssFrmNum;
-		ssFrmNum << setw(5) << setfill('0') <<nFrameID;	
-		string frame_num = ssFrmNum.str();
-
-		std::string outImage = "result/"+m_config.sequenceName+"/oimg_r"+strRf_num+"f"+frame_num+".jpg";
-		imwrite(outImage.c_str(),mergedImg);		
-	}
-}
-void ITTrack::SaveFBTrajectory()
-{
-	int nFirstID = m_frameID - m_frameInterval;
-	stringstream ssRfNum;
-	ssRfNum << setw(4) << setfill('0') <<m_refineNUM+1;	
-	string strRf_num = ssRfNum.str();
-	if(dirExists("TextResult/")==false)
-	{
-		mkdir("TextResult");		
-	}
-	
-	for (int T_ID = 0;T_ID<m_NumTracker;T_ID++)
-	{
-		stringstream ssTRKNum;
-		ssTRKNum << setw(2) << setfill('0') <<T_ID+1;	
-		string tracker_num = ssTRKNum.str();
-
-		std::string outFolder= "TextResult/"+m_config.sequenceName+"/";
-		if(dirExists(outFolder.c_str())==false)
-		{
-			mkdir(outFolder.c_str());		
-		}
-		std::string outTxt = "TextResult/"+m_config.sequenceName+"/tj_r"+strRf_num+"tracker"+tracker_num+".txt";
-		ofstream tmpfile;
-		tmpfile.open(outTxt.c_str());
-		for (int frmID = 0;frmID<=m_frameInterval;frmID++)
-		{
-			int nFrameID = nFirstID+frmID;
-			tmpfile<<m_vecTrajectory[T_ID][nFrameID].XMin()<<","<<m_vecTrajectory[T_ID][nFrameID].YMin()<<","<<m_vecTrajectory[T_ID][nFrameID].Width()<<","<<m_vecTrajectory[T_ID][nFrameID].Height()<<",";
-			tmpfile<<m_vecBackTrajectory[T_ID][frmID].XMin()<<","<<m_vecBackTrajectory[T_ID][frmID].YMin()<<","<<m_vecBackTrajectory[T_ID][frmID].Width()<<","<<m_vecBackTrajectory[T_ID][frmID].Height()<<","<<endl;
-		}
-		tmpfile.close();
-	}
-}
-void ITTrack::DebugInit(const Config& conf)
-{
-	if(dirExists("result/")==false)
-	{
-		mkdir("result");		
-	}
-	if(dirExists("result/")==true)
-	{		
-		string outfolder = "result/"+m_config.sequenceName;
-		if (dirExists(outfolder.c_str())==false)
-		{			
-			mkdir(outfolder.c_str());
-		}		
-	}
-	else
-	{
-		cout<<"========Folder Creation Error========"<<endl;
-		exit(0);
-	}
-	m_refineNUM = 0;
-	m_debugWindowWidth = (int)(100*conf.frameWidth/640+0.5);
-	m_fontScale = (double)conf.frameWidth/1000;
-	m_txtLocX = (int)(m_config.frameWidth);
-	m_txtLocY = (int)(m_config.frameHeight/432);
-}
-
-bool ITTrack::dirExists(const std::string& dirName)
-{
-	unsigned long ftyp = GetFileAttributesA(dirName.c_str());
-	if (ftyp == INVALID_FILE_ATTRIBUTES)
-		return false;  //something is wrong with your path!
-
-	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-		return true;   // this is a directory!
-
-	return false;    // this is not a directory!
-}
 void ITTrack::MemRelbacker()
 {
 

@@ -39,8 +39,8 @@ class Config
 public:
 	Config() { SetDefaults(); }
 	//Config(const std::string& path);
-	void Config::setting(const std::string& path);
-	void Config::setting(std::string& seqname,std::string& seqpath,
+	void setting(const std::string& path);
+	void setting(std::string& seqname,std::string& seqpath,
 		int nSeed, int sRadius, double dsvmC, int svmBSize,std::string featName,std::string kernName, double dParam);
 
 	enum FeatureType
